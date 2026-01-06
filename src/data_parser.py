@@ -41,26 +41,17 @@ class DataParser:
         return line
 
     def _convert_coords(self, pixel_coords, line_data, all_lines):
-        if not pixel_coords:
-            return []
-
+        """从站点的真实GPS坐标构建线路坐标数组"""
         coords = []
-        for coord_str in pixel_coords:
-            parts = coord_str.strip().split()
-            if len(parts) >= 2:
-                try:
-                    x, y = float(parts[0]), float(parts[1])
-                    lng, lat = self._pixel_to_geo(x, y)
-                    coords.append([lng, lat])
-                except ValueError:
-                    continue
-
+        stations_data = line_data.get("st", [])
+        
+        for station_data in stations_data:
+            coord_str = station_data.get("sl", "")
+            geo = self._parse_coords(coord_str)
+            if geo and geo != [0, 0]:
+                coords.append(geo)
+        
         return coords
-
-    def _pixel_to_geo(self, x, y):
-        lng = 116.2 + (x - 600) * 0.0015
-        lat = 39.8 + (900 - y) * 0.001
-        return round(lng, 6), round(lat, 6)
 
     def _convert_stations(self, stations_data, line_id, all_lines):
         stations = []

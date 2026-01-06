@@ -15,5 +15,6 @@ class MetroCrawler:
         return result.get("citylist", [])
 
     def get_metro_data(self, adcode, spell):
-        url = f"{self.base_url}?_={get_timestamp()}&srhdata={adcode}_drw_{spell}.json"
+        metro_adcode = adcode[:4]
+        url = f"{self.base_url}?_={get_timestamp()}&srhdata={metro_adcode}_drw_{spell}.json"
         return safe_request(url)

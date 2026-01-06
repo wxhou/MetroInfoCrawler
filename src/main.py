@@ -89,10 +89,8 @@ def main():
         parser = DataParser()
         subway_data = parser.convert_to_subway_format(raw_data)
 
-        output_dir = os.path.dirname(sys.executable)
-        if not output_dir:
-            output_dir = os.path.dirname(os.path.dirname(__file__))
-        
+        output_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "output")
+        os.makedirs(output_dir, exist_ok=True)
         output_file = os.path.join(output_dir, f"{city_name}_subway.json")
         save_json(subway_data, output_file)
 
